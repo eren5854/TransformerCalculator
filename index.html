@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trafo Calculater</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            display: flex;
+            height: 120vh;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+        }
+        .container{
+            max-width: 700px;
+            width: 100%;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 5px;
+        }
+        .container .title{
+            font-size:  25px;
+            font-weight: 500;
+        }
+        .container form .parameters, .container .form-copy .parameters{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 20px 0 12px 0;
+        }
+        form .parameters .input-box, .form-copy .parameters .input-box{
+            margin-bottom: 15px;
+            width: calc(100% / 2 - 20px);
+        }
+        .parameters .input-box .details{
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .parameters .input-box input{
+            height: 45px;
+            width: 100%;
+            outline: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding-left: 15px;
+            font-size: 16px;
+            border-bottom-width: 2px;
+            transition: all 0.3s ease;
+        }
+        .parameters .input-box input:focus,
+        .parameters .input-box input:valid{
+            border-color: #9b59b6;
+        }
+        form .button{
+            height: 45px;
+            margin: 45px 0;
+        }
+        form .button input{
+            height: 100%;
+            width: 100%;
+            outline: none;
+            color: #9b59b6;
+            background: #71b7e6;
+            border-radius: 10px;
+            border: none;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .container .image{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .image img{
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            width: auto;
+        }
+        .file-button{
+            margin-bottom: 10px;
+        }
+        .file-button input{
+            display: none;
+        }
+        .file-button label{
+            display: inline-block;
+            text-transform: uppercase;
+            color: #fff;
+            background: #c0392b;
+            text-align: center;
+            padding: 15px 30px;
+            font-size: 18px;
+            letter-spacing: 1.5px;
+            user-select: none;
+            cursor: pointer;
+            box-shadow: 5px 15px 25px rgba(0, 0, 0, 0.35);
+            border-radius: 5px;
+        }
+        @media (max-width: 375px){
+            body{
+                height: auto; /* Yüksekliği otomatik olarak ayarla */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px; /* Üstte boşluk bırakmak için padding kullan */
+    }
+            .container{
+                max-width: 100%;
+                margin-top: 20px; /* Üstte boşluk bırakmak için margin kullan */
+            }
+            form .parameters .input-box, .form-copy .parameters .input-box{
+                margin-bottom: 15px;
+                width: 100%;
+            }
+        }
+        @media (max-width: 506px){
+            body{
+            height: auto; /* Yüksekliği otomatik olarak ayarla */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px; /* Üstte boşluk bırakmak için padding kullan */
+    }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img src="image-1.png" alt="">
+        </div>
+        <div class="title">
+            Sac Trafo Hesabı
+        </div>
+        <form id="trafoForm" action="#">
+            <div class="parameters">
+                <div class="input-box">
+                    <span class="details">Nüve(Gauss)</span>
+                    <input type="number" step="any" id="nuve" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Frekans(Hz)</span>
+                    <input type="number" step="any" id="frekans" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Primer Voltajı(Volt)</span>
+                    <input type="number" step="any" id="primerVoltage" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Sekonder Voltajı(Volt)</span>
+                    <input type="number" step="any" id="seconderVoltage" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">A Boyutu(cm)</span>
+                    <input type="number" step="any" id="aSize" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">B Boyutu(cm)</span>
+                    <input type="number" step="any" id="bSize" required>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" value="Hesapla">
+            </div>
+        </form>
+        <div class="form-copy">
+            <div class="parameters" id="result" >
+                <div class="input-box">
+                    <span class="details">Hesaplanan Güç (Watt)</span>
+                    <input type="text" id="calculatePower" readonly>
+                </div>
+                <div class="input-box">
+                    <span class="details">Sipir Başına voltaj</span>
+                    <input type="text" id="spirVoltage" readonly>
+                </div>
+                <div class="input-box">
+                    <span class="details">Primer Sayım Sayısı (Spir)</span>
+                    <input type="text" id="primerCounter" readonly>
+                </div>
+                <div class="input-box">
+                    <span class="details">Sekonder Sayım Sayısı (Spir)</span>
+                    <input type="text" id="seconderCounter" readonly>
+                </div>
+                <div class="input-box">
+                    <span class="details">Primer Akımı (Amp)</span>
+                    <input type="text" id="primerAmp" readonly>
+                </div>
+                <div class="input-box">
+                    <span class="details">Sekonder Akımı (Amp)</span>
+                    <input type="text" id="seconderAmp" readonly>
+                </div>
+                <div class="file-button">
+                    <input type="button" id="fileOutput" value="Save to TXT" onclick="saveToFile()">
+                    <label for="fileOutput"><i class="fa-solid fa-floppy-disk"></i> Kaydet</label>
+                </div>
+                <div class="file-button">
+                    <input type="file" id="fileInput" accept=".txt" onchange="loadFromFile()">
+                    <label for="fileInput"><i class="fa-solid fa-upload"></i> Dosya Yükle</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/ff94e52d91.js" crossorigin="anonymous"></script>
+
+    <script>
+        document.getElementById('trafoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Formun gönderilmesini engelle
+
+            // Nüve ve Frekans değerlerini al
+            const nuve = parseFloat(document.getElementById('nuve').value);
+            const frekans = parseFloat(document.getElementById('frekans').value);
+            const primerVoltage = parseFloat(document.getElementById('primerVoltage').value);
+            const seconderVoltage = parseFloat(document.getElementById('seconderVoltage').value);
+            const aSize = parseFloat(document.getElementById('aSize').value);
+            const bSize = parseFloat(document.getElementById('bSize').value);
+
+            const o1 = (aSize*bSize)/1.15;
+            const l6 = aSize/2.54;
+            const l7 = bSize/2.54;
+            const n6 = l6*l7;
+
+
+            const hesaplananGuc = Math.pow(o1,2); 
+            const spirVoltage = nuve/((28.65*n6)*frekans);
+            const primerCounter = spirVoltage*primerVoltage;
+            const seconderCounter = spirVoltage*seconderVoltage;
+            const primerAmp = hesaplananGuc/primerVoltage;
+            const seconderAmp = hesaplananGuc/seconderVoltage;
+            console.log(hesaplananGuc);
+
+
+
+            // Hesaplanan Güç inputuna yazdır
+            document.getElementById('calculatePower').value = hesaplananGuc.toFixed(2);
+            document.getElementById('spirVoltage').value = spirVoltage.toFixed(2);
+            document.getElementById('primerCounter').value = primerCounter.toFixed();
+            document.getElementById('seconderCounter').value = seconderCounter.toFixed();
+            document.getElementById('primerAmp').value = primerAmp.toFixed(2);
+            document.getElementById('seconderAmp').value = seconderAmp.toFixed(2);
+
+            // Sonuç div'ini görünür yap
+            document.getElementById('result').hidden = false;
+        });
+
+        function saveToFile() {
+            const nuve = document.getElementById('nuve').value;
+            const frekans = document.getElementById('frekans').value;
+            const primerVoltage = document.getElementById('primerVoltage').value;
+            const seconderVoltage = document.getElementById('seconderVoltage').value;
+            const aSize = document.getElementById('aSize').value;
+            const bSize = document.getElementById('bSize').value;
+            const calculatePower = document.getElementById('calculatePower').value;
+            const spirVoltage = document.getElementById('spirVoltage').value;
+            const primerCounter = document.getElementById('primerCounter').value;
+            const seconderCounter = document.getElementById('seconderCounter').value;
+            const primerAmp = document.getElementById('primerAmp').value;
+            const seconderAmp = document.getElementById('seconderAmp').value;
+
+            const data = `Nüve: ${nuve}
+Frekans: ${frekans}
+Primer Voltajı: ${primerVoltage}
+Sekonder Voltajı: ${seconderVoltage}
+A Boyutu: ${aSize}
+B Boyutu: ${bSize}
+Hesaplanan Güç: ${calculatePower}
+Sipir Başına Voltaj: ${spirVoltage}
+Primer Sayım Sayısı: ${primerCounter}
+Sekonder Sayım Sayısı: ${seconderCounter}
+Primer Akımı: ${primerAmp}
+Sekonder Akımı: ${seconderAmp}
+`;
+
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'trafo_data.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function loadFromFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split('\n');
+                document.getElementById('nuve').value = getValue(lines[0]);
+                document.getElementById('frekans').value = getValue(lines[1]);
+                document.getElementById('primerVoltage').value = getValue(lines[2]);
+                document.getElementById('seconderVoltage').value = getValue(lines[3]);
+                document.getElementById('aSize').value = getValue(lines[4]);
+                document.getElementById('bSize').value = getValue(lines[5]);
+                document.getElementById('calculatePower').value = getValue(lines[6]);
+                document.getElementById('spirVoltage').value = getValue(lines[7]);
+                document.getElementById('primerCounter').value = getValue(lines[8]);
+                document.getElementById('seconderCounter').value = getValue(lines[9]);
+                document.getElementById('primerAmp').value = getValue(lines[10]);
+                document.getElementById('seconderAmp').value = getValue(lines[11]);
+            };
+            reader.readAsText(file);
+        }
+
+        function getValue(line) {
+            return line.split(': ')[1];
+        }
+    </script>
+</body>
+</html>
